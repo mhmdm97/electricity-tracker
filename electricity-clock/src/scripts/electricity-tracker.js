@@ -1,18 +1,24 @@
 
-function generateElectricitySchedule() {
+function generateElectricitySchedule(periodCount = 56) {
     const schedule = [];
-    const today = new Date();
-    
-    // Today's electricity is available 18:00-21:00 (6pm-9pm)
-    const baseStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 18, 0, 0);
-    
-    // Generate schedule for next 7 days
+    // Fixed reference: July 20, 2025, 18:00
+    const baseStart = new Date(2025, 6, 20, 18, 0, 0); // Month is 0-based (6 = July)
+    const now = new Date();
+
+    // Find the most recent ON period start before now
     let currentStart = new Date(baseStart);
-    
-    for (let i = 0; i < 56; i++) { // 8 cycles per day * 7 days
+    while (currentStart.getTime() + 3 * 60 * 60 * 1000 <= now.getTime()) {
+        currentStart = new Date(currentStart.getTime() + 9 * 60 * 60 * 1000);
+    }
+    // Go back one cycle to ensure we include the current/previous ON period
+    while (currentStart > now) {
+        currentStart = new Date(currentStart.getTime() - 9 * 60 * 60 * 1000);
+    }
+
+    for (let i = 0; i < periodCount; i++) {
         const start = new Date(currentStart);
-        const end = new Date(currentStart.getTime() + 3 * 60 * 60 * 1000); // Add 3 hours
-        
+        const end = new Date(currentStart.getTime() + 3 * 60 * 60 * 1000); // 3 hours ON
+
         schedule.push({
             start: start,
             end: end,
@@ -20,11 +26,11 @@ function generateElectricitySchedule() {
             endTime: formatTime(end),
             date: formatDate(start)
         });
-        
-        // Next cycle starts 9 hours later (3 hours on + 6 hours off)
+
+        // Next ON period is 9 hours later
         currentStart = new Date(currentStart.getTime() + 9 * 60 * 60 * 1000);
     }
-    
+
     return schedule;
 }
 
