@@ -1,0 +1,10 @@
+name = "electricity-tracker"
+compatibility_date = "2024-02-07"
+assets = { directory = "./dist", binding = "ASSETS" }
+main = "src/worker.js"
+
+# Basic worker for serving assets if not using Pages
+[[kv_namespaces]]
+binding = "ASSETS_KV"
+id = "dummy"
+preview_id = "dummy"
