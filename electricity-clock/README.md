@@ -1,16 +1,82 @@
-# React + Vite
+# Electricity Clock Tracker (React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application that displays a real-time clock and tracks electricity availability based on a 3-hour ON, 6-hour OFF cycle pattern. Built with React and Vite.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Real-time Clock**: Live digital clock with seconds precision
+- **Electricity Status**: Visual indicator showing current electricity availability
+- **Schedule Display**: Shows upcoming electricity periods with dates and times
+- **Automatic Pattern Calculation**: Calculates future periods based on the repeating cycle
+- **Responsive Design**: Works on desktop and mobile devices
+- **Modern UI**: Clean interface with gradient backgrounds and smooth animations
 
-## React Compiler
+## Electricity Pattern
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The application tracks electricity based on this pattern:
+- **3 hours ON** - Electricity available
+- **6 hours OFF** - No electricity
+- **Repeating cycle** - Pattern continues indefinitely
 
-## Expanding the ESLint configuration
+Starting reference: Feb 7, 2026, 12:00
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Project Structure
+
+```
+electricity-clock/
+├── src/
+│   ├── components/
+│   │   ├── Clock.jsx             # Real-time clock component
+│   │   ├── Status.jsx            # Electricity status component
+│   │   └── ScheduleList.jsx      # Schedule display component
+│   ├── utils/
+│   │   └── electricity.js        # Electricity schedule logic
+│   ├── App.jsx                   # Main application component
+│   └── main.jsx                  # Entry point
+├── package.json                  # npm dependencies and scripts
+├── vite.config.js                # Vite configuration
+└── README.md                     # Project documentation
+```
+
+## Installation & Setup
+
+1. **Clone the repository**:
+   ```bash
+   git clone <repository-url>
+   cd electricity-clock
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+
+4. **Open in browser**:
+   - The application will automatically be available at `http://localhost:5173`
+
+## Available Scripts
+
+- `npm run dev` - Starts the development server
+- `npm run build` - Builds the application for production
+- `npm run lint` - Runs ESLint
+- `npx vitest run` - Runs unit tests
+
+## Technologies Used
+
+- **React** - UI Library
+- **Vite** - Build tool and development server
+- **CSS3** - Styling
+- **Vitest** - Unit testing
+
+## Browser Compatibility
+
+- Chrome (recommended)
+- Firefox
+- Safari
+- Edge
+- Modern mobile browsers
