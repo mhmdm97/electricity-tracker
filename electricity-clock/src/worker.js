@@ -11,6 +11,7 @@ export default {
 
     // Fallback: Return 404 or index.html?
     // In a pure static setup, we shouldn't reach here without ASSETS.
-    return new Response("Not Found", { status: 404 });
+    console.error("ASSETS binding not found!");
+    return new Response("Not Found (ASSETS missing)", { status: 404 });
   }
 };
