@@ -12,6 +12,3 @@ export function startClock() {
     setInterval(updateClock, 1000);
     updateClock();
 }
-
-// Make startClock available globally
-window.startClock = startClock;
