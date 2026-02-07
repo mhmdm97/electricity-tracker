@@ -93,12 +93,12 @@ function displayElectricitySchedule() {
     
     // Show next 10 periods
     const upcomingPeriods = schedule.slice(0, 10);
+    const now = new Date();
     
     upcomingPeriods.forEach((period, index) => {
         const periodElement = document.createElement('div');
         periodElement.className = 'schedule-item';
         
-        const now = new Date();
         const isActive = now >= period.start && now < period.end;
         const isPast = now >= period.end;
         
