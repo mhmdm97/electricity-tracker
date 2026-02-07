@@ -8,3 +8,7 @@ main = "src/worker.js"
 binding = "ASSETS_KV"
 id = "dummy"
 preview_id = "dummy"
+
+[build]
+command = "npm run build"
+watch_dir = "src"
