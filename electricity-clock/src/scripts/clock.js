@@ -1,4 +1,4 @@
-function startClock() {
+export function startClock() {
     const clockElement = document.getElementById('clock');
     
     function updateClock() {
