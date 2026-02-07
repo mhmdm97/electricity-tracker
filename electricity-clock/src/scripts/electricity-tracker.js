@@ -1,8 +1,8 @@
 
-function generateElectricitySchedule(periodCount = 56) {
+export function generateElectricitySchedule(periodCount = 56) {
     const schedule = [];
-    // Fixed reference: July 20, 2025, 18:00
-    const baseStart = new Date(2025, 6, 20, 18, 0, 0); // Month is 0-based (6 = July)
+    // Fixed reference: Feb 7, 2026, 12:00
+    const baseStart = new Date(2026, 1, 7, 12, 0, 0); // Month is 0-based (1 = Feb)
     const now = new Date();
 
     // Find the most recent ON period start before now
