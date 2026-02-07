@@ -64,7 +64,7 @@ electricity-clock/
 - `npm run dev` - Starts the development server
 - `npm run build` - Builds the application for production
 - `npm run lint` - Runs ESLint
-- `npx vitest run` - Runs unit tests
+- `npm test` - Runs unit tests
 
 ## Technologies Used
 
