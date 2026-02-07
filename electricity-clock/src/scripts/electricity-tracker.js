@@ -39,33 +39,7 @@ function formatTime(date) {
 }
 
 function formatDate(date) {
-    return formatRelativeDate(date);
-}
-
-function formatRelativeDate(date) {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    // Create new Date for comparison to avoid mutating original or affecting comparison with time
-    const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-    if (target.getTime() === today.getTime()) return 'Today';
-    if (target.getTime() === tomorrow.getTime()) return 'Tomorrow';
-
     return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-}
-
-function formatDuration(ms) {
-    const totalMinutes = Math.max(0, Math.ceil(ms / (1000 * 60)));
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-
-    if (hours > 0) {
-        return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
-    }
-    return `${minutes}m`;
 }
 
 export function isElectricityCurrentlyAvailable(schedule) {
@@ -93,12 +67,12 @@ function displayElectricitySchedule() {
     
     // Show next 10 periods
     const upcomingPeriods = schedule.slice(0, 10);
-    const now = new Date();
     
     upcomingPeriods.forEach((period, index) => {
         const periodElement = document.createElement('div');
         periodElement.className = 'schedule-item';
         
+        const now = new Date();
         const isActive = now >= period.start && now < period.end;
         const isPast = now >= period.end;
         
@@ -127,17 +101,16 @@ export function trackElectricity() {
     const displayElement = document.getElementById('electricity-status');
     if (displayElement) {
         if (isAvailable && currentPeriod) {
-            const timeRemaining = formatDuration(currentPeriod.end - new Date());
             displayElement.innerHTML = `
                 <div class="status-text">Electricity is available</div>
-                <div class="status-detail">Until ${currentPeriod.endTime} (${timeRemaining} left)</div>
+                <div class="status-detail">Until ${currentPeriod.endTime}</div>
             `;
             displayElement.className = 'status available';
         } else if (nextPeriod) {
-            const timeUntilNext = formatDuration(nextPeriod.start - new Date());
+            const timeUntilNext = Math.ceil((nextPeriod.start - new Date()) / (1000 * 60 * 60));
             displayElement.innerHTML = `
                 <div class="status-text">Electricity is not available</div>
-                <div class="status-detail">Next: ${nextPeriod.date} ${nextPeriod.startTime} (in ${timeUntilNext})</div>
+                <div class="status-detail">Next: ${nextPeriod.date} ${nextPeriod.startTime} (in ${timeUntilNext}h)</div>
             `;
             displayElement.className = 'status unavailable';
         }
