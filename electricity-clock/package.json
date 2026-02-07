@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "description": "A simple clock that highlights electricity availability timeframes.",
   "main": "src/index.html",
+  "type": "module",
   "scripts": {
     "start": "live-server src",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "live-server": "^1.2.1"
   },
   "devDependencies": {
+    "jest": "^29.0.0",
     "typescript": "^4.5.4"
   },
   "author": "",

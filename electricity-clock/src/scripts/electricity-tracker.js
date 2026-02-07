@@ -42,17 +42,17 @@ function formatDate(date) {
     return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
 }
 
-function isElectricityCurrentlyAvailable(schedule) {
+export function isElectricityCurrentlyAvailable(schedule) {
     const now = new Date();
     return schedule.some(period => now >= period.start && now < period.end);
 }
 
-function getNextElectricityPeriod(schedule) {
+export function getNextElectricityPeriod(schedule) {
     const now = new Date();
     return schedule.find(period => period.start > now);
 }
 
-function getCurrentElectricityPeriod(schedule) {
+export function getCurrentElectricityPeriod(schedule) {
     const now = new Date();
     return schedule.find(period => now >= period.start && now < period.end);
 }
