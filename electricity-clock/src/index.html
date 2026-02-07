@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Track electricity availability schedule with real-time updates.">
     <title>Electricity Clock</title>
     <link rel="stylesheet" href="styles/main.css">
 </head>
@@ -10,8 +11,8 @@
     <div class="container">
         <div class="clock-container">
             <h1>Current Time</h1>
-            <div id="clock" class="clock"></div>
-            <div id="electricity-status" class="status"></div>
+            <div id="clock" class="clock" aria-label="Current time"></div>
+            <div id="electricity-status" class="status" aria-live="polite"></div>
         </div>
         
         <div class="schedule-container">
