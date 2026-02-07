@@ -1,4 +1,4 @@
-function startClock() {
+export function startClock() {
     const clockElement = document.getElementById('clock');
     
     function updateClock() {
@@ -12,6 +12,3 @@ function startClock() {
     setInterval(updateClock, 1000);
     updateClock();
 }
-
-// Make startClock available globally
-window.startClock = startClock;
