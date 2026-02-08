@@ -1,4 +1,4 @@
-name = "electricity-clock-react"
+name = "electricity-tracker"
 compatibility_date = "2024-04-01"
 assets = { directory = "./dist", binding = "ASSETS" }
 main = "src/worker.js"
