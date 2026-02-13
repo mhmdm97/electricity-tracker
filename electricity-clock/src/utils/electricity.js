@@ -1,9 +1,16 @@
+import { fromZonedTime, formatInTimeZone } from 'date-fns-tz';
+
+const TIMEZONE = 'Asia/Beirut';
 
 export function generateElectricitySchedule(periodCount = 56, config = {}) {
+    // Default reference time matches origin/main logic: Feb 7, 2026, 12:00 in Asia/Beirut
+    // This creates a UTC Date object corresponding to that local time
+    const defaultReferenceTime = fromZonedTime('2026-02-07 12:00:00', TIMEZONE);
+
     const {
         onDuration = 3,
         offDuration = 6,
-        referenceTime = new Date(2026, 1, 7, 12, 0, 0)
+        referenceTime = defaultReferenceTime
     } = config;
 
     const schedule = [];
@@ -46,11 +53,11 @@ export function generateElectricitySchedule(periodCount = 56, config = {}) {
 }
 
 function formatTime(date) {
-    return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    return formatInTimeZone(date, TIMEZONE, 'HH:mm');
 }
 
 function formatDate(date) {
-    return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+    return formatInTimeZone(date, TIMEZONE, 'dd/MM/yyyy');
 }
 
 export function isElectricityCurrentlyAvailable(schedule) {

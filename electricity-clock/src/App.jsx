@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { fromZonedTime } from 'date-fns-tz';
 import { Clock } from './components/Clock';
 import { Status } from './components/Status';
 import { ScheduleList } from './components/ScheduleList';
@@ -6,7 +7,7 @@ import { ScheduleList } from './components/ScheduleList';
 const DEFAULT_CONFIG = {
     onDuration: 3,
     offDuration: 6,
-    referenceTime: new Date(2026, 1, 7, 12, 0, 0).toISOString()
+    referenceTime: fromZonedTime('2026-02-07 12:00:00', 'Asia/Beirut').toISOString()
 };
 
 function App() {
