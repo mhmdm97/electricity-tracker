@@ -6,12 +6,12 @@ import {
     getNextElectricityPeriod
 } from '../utils/electricity';
 
-export function Status() {
+export function Status({ config }) {
     const [status, setStatus] = useState(null);
 
     useEffect(() => {
         const updateStatus = () => {
-            const schedule = generateElectricitySchedule();
+            const schedule = generateElectricitySchedule(56, config);
             const isAvailable = isElectricityCurrentlyAvailable(schedule);
             const currentPeriod = getCurrentElectricityPeriod(schedule);
             const nextPeriod = getNextElectricityPeriod(schedule);
@@ -22,7 +22,7 @@ export function Status() {
         updateStatus();
         const interval = setInterval(updateStatus, 60000); // Update every minute
         return () => clearInterval(interval);
-    }, []);
+    }, [config]);
 
     if (!status) return null;
 

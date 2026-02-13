@@ -1,23 +1,35 @@
 
-export function generateElectricitySchedule(periodCount = 56) {
+export function generateElectricitySchedule(periodCount = 56, config = {}) {
+    const {
+        onDuration = 3,
+        offDuration = 6,
+        referenceTime = new Date(2026, 1, 7, 12, 0, 0)
+    } = config;
+
     const schedule = [];
-    // Fixed reference: Feb 7, 2026, 12:00
-    const baseStart = new Date(2026, 1, 7, 12, 0, 0); // Month is 0-based (1 = Feb)
+    const baseStart = new Date(referenceTime);
     const now = new Date();
 
-    // Find the most recent ON period start before now
-    let currentStart = new Date(baseStart);
-    while (currentStart.getTime() + 3 * 60 * 60 * 1000 <= now.getTime()) {
-        currentStart = new Date(currentStart.getTime() + 9 * 60 * 60 * 1000);
-    }
-    // Go back one cycle to ensure we include the current/previous ON period
-    while (currentStart > now) {
-        currentStart = new Date(currentStart.getTime() - 9 * 60 * 60 * 1000);
+    const onDurationMs = onDuration * 60 * 60 * 1000;
+    const offDurationMs = offDuration * 60 * 60 * 1000;
+    const cycleDurationMs = onDurationMs + offDurationMs;
+
+    // Calculate how many full cycles have passed since baseStart
+    const diff = now.getTime() - baseStart.getTime();
+    let currentStart;
+
+    if (diff >= 0) {
+        const cyclesPassed = Math.floor(diff / cycleDurationMs);
+        currentStart = new Date(baseStart.getTime() + cyclesPassed * cycleDurationMs);
+    } else {
+        // baseStart is in the future relative to now
+        const cyclesNeeded = Math.ceil(Math.abs(diff) / cycleDurationMs);
+        currentStart = new Date(baseStart.getTime() - cyclesNeeded * cycleDurationMs);
     }
 
     for (let i = 0; i < periodCount; i++) {
         const start = new Date(currentStart);
-        const end = new Date(currentStart.getTime() + 3 * 60 * 60 * 1000); // 3 hours ON
+        const end = new Date(currentStart.getTime() + onDurationMs);
 
         schedule.push({
             start: start,
@@ -27,8 +39,7 @@ export function generateElectricitySchedule(periodCount = 56) {
             date: formatDate(start)
         });
 
-        // Next ON period is 9 hours later
-        currentStart = new Date(currentStart.getTime() + 9 * 60 * 60 * 1000);
+        currentStart = new Date(currentStart.getTime() + cycleDurationMs);
     }
 
     return schedule;

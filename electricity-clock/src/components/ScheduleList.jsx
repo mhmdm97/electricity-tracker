@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 import { generateElectricitySchedule } from '../utils/electricity';
 
-export function ScheduleList() {
+export function ScheduleList({ config }) {
     const [schedule, setSchedule] = useState([]);
 
     useEffect(() => {
         const updateSchedule = () => {
-            const allPeriods = generateElectricitySchedule();
+            const allPeriods = generateElectricitySchedule(56, config);
             setSchedule(allPeriods.slice(0, 10));
         };
 
         updateSchedule();
         const interval = setInterval(updateSchedule, 60000); // Update every minute
         return () => clearInterval(interval);
-    }, []);
+    }, [config]);
 
     const now = new Date();
 
