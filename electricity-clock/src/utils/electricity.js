@@ -1,18 +1,44 @@
+import { fromZonedTime, formatInTimeZone } from 'date-fns-tz';
 
-export function generateElectricitySchedule(periodCount = 56) {
+const TIMEZONE = 'Asia/Beirut';
+
+export function generateElectricitySchedule(periodCount = 56, now = new Date()) {
     const schedule = [];
-    // Fixed reference: Feb 7, 2026, 12:00
-    const baseStart = new Date(2026, 1, 7, 12, 0, 0); // Month is 0-based (1 = Feb)
-    const now = new Date();
+    // Fixed reference: Feb 7, 2026, 12:00 in Asia/Beirut
+    // This creates a UTC Date object corresponding to that local time
+    const baseStart = fromZonedTime('2026-02-07 12:00:00', TIMEZONE);
 
     // Find the most recent ON period start before now
     let currentStart = new Date(baseStart);
+    // 9 hours in milliseconds
+    const CYCLE_DURATION = 9 * 60 * 60 * 1000;
+
+    // If baseStart is in the future relative to now, we need to go back?
+    // Or if baseStart is far in the past.
+    // The loop logic below assumes baseStart < now or handles it.
+
+    // If baseStart is > now, we should subtract 9h until we are just before now?
+    // Or if baseStart is < now, add 9h until we are just before now.
+
+    // Original logic:
+    // while (currentStart + 3h <= now) add 9h
+    // This works if currentStart starts way back.
+    // But baseStart is Feb 7 2026.
+    // If now is Feb 13 2026, it will add.
+
+    // We need to handle moving backwards if baseStart is in the future?
+    // No, baseStart is fixed. If user runs this in 2025, baseStart is future.
+    // Then the loop: `currentStart.getTime() + 3h <= now.getTime()` is false immediately.
+    // Then `while (currentStart > now)` will run.
+    // It subtracts 9h.
+    // So logic is fine for both directions.
+
     while (currentStart.getTime() + 3 * 60 * 60 * 1000 <= now.getTime()) {
-        currentStart = new Date(currentStart.getTime() + 9 * 60 * 60 * 1000);
+        currentStart = new Date(currentStart.getTime() + CYCLE_DURATION);
     }
     // Go back one cycle to ensure we include the current/previous ON period
     while (currentStart > now) {
-        currentStart = new Date(currentStart.getTime() - 9 * 60 * 60 * 1000);
+        currentStart = new Date(currentStart.getTime() - CYCLE_DURATION);
     }
 
     for (let i = 0; i < periodCount; i++) {
@@ -28,18 +54,18 @@ export function generateElectricitySchedule(periodCount = 56) {
         });
 
         // Next ON period is 9 hours later
-        currentStart = new Date(currentStart.getTime() + 9 * 60 * 60 * 1000);
+        currentStart = new Date(currentStart.getTime() + CYCLE_DURATION);
     }
 
     return schedule;
 }
 
 function formatTime(date) {
-    return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    return formatInTimeZone(date, TIMEZONE, 'HH:mm');
 }
 
 function formatDate(date) {
-    return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+    return formatInTimeZone(date, TIMEZONE, 'dd/MM/yyyy');
 }
 
 export function isElectricityCurrentlyAvailable(schedule) {
