@@ -4,9 +4,9 @@ const TIMEZONE = 'Asia/Beirut';
 
 export function generateElectricitySchedule(periodCount = 56, now = new Date()) {
     const schedule = [];
-    // Fixed reference: Feb 7, 2026, 12:00 in Asia/Beirut
+    // Fixed reference: March 18, 2026, 15:00 in Asia/Beirut
     // This creates a UTC Date object corresponding to that local time
-    const baseStart = fromZonedTime('2026-02-07 12:00:00', TIMEZONE);
+    const baseStart = fromZonedTime('2026-03-18 15:00:00', TIMEZONE);
 
     // Find the most recent ON period start before now
     let currentStart = new Date(baseStart);
