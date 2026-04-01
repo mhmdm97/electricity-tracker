@@ -20,7 +20,7 @@ export function Status({ config }) {
         };
 
         updateStatus();
-        const interval = setInterval(updateStatus, 60000); // Update every minute
+        const interval = setInterval(updateStatus, 60000);
         return () => clearInterval(interval);
     }, [config]);
 
@@ -30,17 +30,27 @@ export function Status({ config }) {
 
     if (isAvailable && currentPeriod) {
         return (
-            <div className="status available">
-                <div className="status-text">Electricity is available</div>
+            <div className="status-section">
+                <span className="status-label">Power Status</span>
+                <div className="status available">
+                    <span className="material-symbols-outlined">light_mode</span>
+                    Power Cycle On
+                </div>
                 <div className="status-detail">Until {currentPeriod.endTime}</div>
             </div>
         );
     } else if (nextPeriod) {
         const timeUntilNext = Math.ceil((nextPeriod.start - new Date()) / (1000 * 60 * 60));
         return (
-            <div className="status unavailable">
-                <div className="status-text">Electricity is not available</div>
-                <div className="status-detail">Next: {nextPeriod.date} {nextPeriod.startTime} (in {timeUntilNext}h)</div>
+            <div className="status-section">
+                <span className="status-label">Power Status</span>
+                <div className="status unavailable">
+                    <span className="material-symbols-outlined">nights_stay</span>
+                    Power Cycle Off
+                </div>
+                <div className="status-detail">
+                    Next: {nextPeriod.date} {nextPeriod.startTime} (in {timeUntilNext}h)
+                </div>
             </div>
         );
     }

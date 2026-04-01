@@ -11,7 +11,7 @@ export function ScheduleList({ config }) {
         };
 
         updateSchedule();
-        const interval = setInterval(updateSchedule, 60000); // Update every minute
+        const interval = setInterval(updateSchedule, 60000);
         return () => clearInterval(interval);
     }, [config]);
 
@@ -22,22 +22,27 @@ export function ScheduleList({ config }) {
             {schedule.map((period, index) => {
                 const isActive = now >= period.start && now < period.end;
                 const isPast = now >= period.end;
-                let statusClass = '';
+                let itemClass = '';
+                let statusClass = 'status-upcoming';
                 let statusText = 'Upcoming';
 
                 if (isActive) {
-                    statusClass = 'active';
-                    statusText = 'Active Now';
+                    itemClass = 'active';
+                    statusClass = 'status-active';
+                    statusText = 'Active';
                 } else if (isPast) {
-                    statusClass = 'past';
+                    itemClass = 'past';
+                    statusClass = 'status-past';
                     statusText = 'Past';
                 }
 
                 return (
-                    <div key={index} className={`schedule-item ${statusClass}`}>
-                        <div className="period-date">{period.date}</div>
-                        <div className="period-time">{period.startTime} - {period.endTime}</div>
-                        <div className="period-status">{statusText}</div>
+                    <div key={index} className={`schedule-item ${itemClass}`}>
+                        <div className="period-time-block">
+                            <div className="period-date">{period.date}</div>
+                            <div className="period-time">{period.startTime} – {period.endTime}</div>
+                        </div>
+                        <div className={`period-status ${statusClass}`}>{statusText}</div>
                     </div>
                 );
             })}

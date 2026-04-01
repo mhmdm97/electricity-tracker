@@ -1,165 +1,535 @@
+/* ===== CSS Variables ===== */
+:root {
+    --background: #111316;
+    --surface: #111316;
+    --surface-container-lowest: #0c0e11;
+    --surface-container-low: #1a1c1f;
+    --surface-container: #1e2023;
+    --surface-container-high: #282a2d;
+    --surface-container-highest: #333538;
+    --surface-bright: #37393d;
+    --surface-variant: #333538;
+
+    --primary: #75ff9e;
+    --primary-container: #00e676;
+    --on-primary: #003918;
+
+    --secondary: #ffdf9e;
+    --secondary-container: #fabd00;
+
+    --on-surface: #e2e2e6;
+    --on-surface-variant: #bacbb9;
+
+    --outline: #859585;
+    --outline-variant: #3b4a3d;
+
+    --error: #ffb4ab;
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    margin: 0;
-    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background);
+    color: var(--on-surface);
     min-height: 100vh;
-    color: #333;
+    -webkit-font-smoothing: antialiased;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 30px;
-    align-items: start;
+/* ===== App Shell ===== */
+.app-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background);
 }
 
-.clock-container {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    backdrop-filter: blur(10px);
-}
-
-.clock-container h1 {
-    margin: 0 0 20px 0;
-    color: #2c3e50;
-    font-size: 24px;
-}
-
-.clock {
-    font-size: 48px;
-    color: #2c3e50;
-    margin-bottom: 20px;
-    font-weight: bold;
-    font-family: 'Courier New', monospace;
-}
-
-.status {
-    padding: 15px;
-    border-radius: 10px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.status.available {
-    background: linear-gradient(135deg, #4CAF50, #45a049);
-    color: white;
-}
-
-.status.unavailable {
-    background: linear-gradient(135deg, #f44336, #da190b);
-    color: white;
-}
-
-.status-text {
-    font-size: 18px;
-    margin-bottom: 5px;
-}
-
-.status-detail {
-    font-size: 14px;
-    opacity: 0.9;
-}
-
-.schedule-container {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-}
-
-.schedule-container h2 {
-    margin: 0 0 15px 0;
-    color: #2c3e50;
-    font-size: 24px;
-}
-
-.schedule-info {
-    background: #e8f4fd;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    border-left: 4px solid #2196F3;
-}
-
-.schedule-info p {
-    margin: 0;
-    color: #1976D2;
-    font-weight: 500;
-}
-
-.schedule-list {
-    display: grid;
-    gap: 10px;
-}
-
-.schedule-item {
-    padding: 15px;
-    border-radius: 8px;
-    border: 2px solid #e0e0e0;
-    background: #fafafa;
-    transition: all 0.3s ease;
-    display: grid;
-    grid-template-columns: 120px 1fr 100px;
-    gap: 15px;
+/* ===== Header ===== */
+.header {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: var(--surface-container-low);
 }
 
-.schedule-item.active {
-    background: linear-gradient(135deg, #4CAF50, #45a049);
-    color: white;
-    border-color: #4CAF50;
-    transform: scale(1.02);
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-}
-
-.schedule-item.past {
-    background: #f5f5f5;
-    color: #888;
-    opacity: 0.7;
-}
-
-.period-date {
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.period-time {
-    font-size: 16px;
-    font-weight: bold;
-    font-family: 'Courier New', monospace;
-}
-
-.period-status {
-    font-size: 12px;
-    text-align: right;
-    font-weight: bold;
+.header-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 0.1em;
     text-transform: uppercase;
 }
 
-@media (max-width: 768px) {
-    .container {
-        grid-template-columns: 1fr;
-        gap: 20px;
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.icon-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    background: none;
+    border: none;
+    border-radius: 0.375rem;
+    color: var(--on-surface-variant);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.icon-btn:hover {
+    background-color: var(--surface-container-high);
+    color: var(--on-surface);
+}
+
+.icon-btn .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+/* ===== Main Content ===== */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 2rem;
+    gap: 2rem;
+}
+
+/* ===== Clock Ring Section ===== */
+.clock-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.clock-ring-wrapper {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        #75ff9e 0deg 90deg,
+        #333538 90deg 180deg,
+        #75ff9e 180deg 270deg,
+        #333538 270deg 360deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clock-ring-inner {
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    background-color: var(--surface-container-low);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clock {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.75rem;
+    font-weight: 700;
+    color: var(--on-surface);
+    letter-spacing: -0.02em;
+}
+
+/* ===== Status Section ===== */
+.status-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--on-surface-variant);
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 9999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+.status.available {
+    background-color: rgba(117, 255, 158, 0.12);
+    color: var(--primary);
+}
+
+.status.available .material-symbols-outlined {
+    color: var(--primary);
+    font-size: 1.25rem;
+}
+
+.status.unavailable {
+    background-color: rgba(255, 223, 158, 0.12);
+    color: var(--secondary);
+}
+
+.status.unavailable .material-symbols-outlined {
+    color: var(--secondary);
+    font-size: 1.25rem;
+}
+
+.status-detail {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    color: var(--on-surface-variant);
+    text-align: center;
+}
+
+/* ===== Action Buttons ===== */
+.action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.375rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.action-btn .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.action-btn-secondary {
+    background-color: var(--surface-container-highest);
+    color: var(--primary);
+}
+
+.action-btn-secondary:hover {
+    background-color: var(--surface-bright);
+}
+
+/* ===== Schedule Section ===== */
+.schedule-section {
+    width: 100%;
+    max-width: 640px;
+    background-color: var(--surface-container-low);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+}
+
+.schedule-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.schedule-section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--on-surface);
+}
+
+.schedule-pattern-badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: var(--on-surface-variant);
+    background-color: var(--surface-container);
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+}
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.schedule-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: 0.375rem;
+    background-color: var(--surface-container);
+    transition: background-color 0.2s;
+}
+
+.schedule-item.active {
+    background-color: rgba(117, 255, 158, 0.1);
+    outline: 1px solid rgba(117, 255, 158, 0.2);
+}
+
+.schedule-item.past {
+    opacity: 0.45;
+}
+
+.period-time-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.period-date {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: var(--on-surface-variant);
+}
+
+.period-time {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--on-surface);
+}
+
+.schedule-item.active .period-time {
+    color: var(--primary);
+}
+
+.period-status {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+}
+
+.period-status.status-active {
+    background-color: rgba(117, 255, 158, 0.15);
+    color: var(--primary);
+}
+
+.period-status.status-upcoming {
+    background-color: var(--surface-container-highest);
+    color: var(--on-surface-variant);
+}
+
+.period-status.status-past {
+    background-color: var(--surface-container-highest);
+    color: var(--on-surface-variant);
+}
+
+/* ===== Settings Modal ===== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-panel {
+    background-color: var(--surface-container-low);
+    border-radius: 0.5rem;
+    padding: 1.75rem;
+    width: 100%;
+    max-width: 420px;
+    transform: scale(0.95);
+    transition: transform 0.2s;
+}
+
+.modal-overlay.open .modal-panel {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.modal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--on-surface);
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    color: var(--on-surface-variant);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.modal-close-btn:hover {
+    color: var(--on-surface);
+}
+
+.form-field {
+    margin-bottom: 1.25rem;
+}
+
+.form-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    background-color: var(--surface-container);
+    border: none;
+    border-radius: 0.375rem;
+    color: var(--on-surface);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    outline: none;
+    transition: background-color 0.2s;
+}
+
+.form-input:focus {
+    background-color: var(--surface-container-highest);
+    box-shadow: 0 0 0 2px rgba(117, 255, 158, 0.25);
+}
+
+/* number input: remove spinner in Firefox */
+.form-input[type="number"] {
+    -moz-appearance: textfield;
+}
+.form-input[type="number"]::-webkit-outer-spin-button,
+.form-input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+/* datetime-local: color-scheme for dark */
+.form-input[type="datetime-local"] {
+    color-scheme: dark;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+}
+
+.btn-ghost {
+    padding: 0.625rem 1.25rem;
+    background: none;
+    border: none;
+    border-radius: 0.375rem;
+    color: var(--on-surface-variant);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-ghost:hover {
+    background-color: var(--surface-container-high);
+    color: var(--on-surface);
+}
+
+.btn-primary {
+    padding: 0.625rem 1.25rem;
+    background: linear-gradient(135deg, #75ff9e, #00e676);
+    border: none;
+    border-radius: 0.375rem;
+    color: var(--on-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+    .header {
+        padding: 0.875rem 1rem;
     }
-    
+
+    .main-content {
+        padding: 2rem 1rem;
+    }
+
+    .clock-ring-wrapper {
+        width: 180px;
+        height: 180px;
+    }
+
+    .clock-ring-inner {
+        width: 154px;
+        height: 154px;
+    }
+
     .clock {
-        font-size: 36px;
+        font-size: 2.25rem;
     }
-    
+
+    .schedule-section {
+        padding: 1rem;
+    }
+
     .schedule-item {
-        grid-template-columns: 1fr;
-        gap: 8px;
-        text-align: center;
-    }
-    
-    .period-status {
-        text-align: center;
+        grid-template-columns: 1fr auto;
+        gap: 0.5rem;
     }
 }

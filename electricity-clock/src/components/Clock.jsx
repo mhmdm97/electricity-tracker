@@ -16,8 +16,12 @@ export function Clock() {
   const seconds = String(time.getSeconds()).padStart(2, '0');
 
   return (
-    <div id="clock" className="clock">
-      {hours}:{minutes}:{seconds}
+    <div className="clock-ring-wrapper">
+      <div className="clock-ring-inner">
+        <div id="clock" className="clock">
+          {hours}:{minutes}:{seconds}
+        </div>
+      </div>
     </div>
   );
 }
