@@ -21,39 +21,48 @@ function App() {
         }
     });
 
+    const [modalOpen, setModalOpen] = useState(false);
+    const [draft, setDraft] = useState(config);
+
     useEffect(() => {
         localStorage.setItem('electricityConfig', JSON.stringify(config));
     }, [config]);
 
-    const handleReset = () => {
-        setConfig(DEFAULT_CONFIG);
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setConfig(prev => ({
-            ...prev,
-            [name]: Number(value)
-        }));
-    };
-
-    const handleDateChange = (e) => {
-        const localDate = new Date(e.target.value);
-        if (!isNaN(localDate.getTime())) {
-             setConfig(prev => ({
-                ...prev,
-                referenceTime: localDate.toISOString()
-            }));
-        }
-    };
-
-    // Format UTC ISO string to Local ISO string (YYYY-MM-DDTHH:mm) for input
     const formatForInput = (isoString) => {
         if (!isoString) return '';
         const date = new Date(isoString);
         const offset = date.getTimezoneOffset() * 60000;
-        const localISOTime = (new Date(date.getTime() - offset)).toISOString().slice(0, 16);
-        return localISOTime;
+        return (new Date(date.getTime() - offset)).toISOString().slice(0, 16);
+    };
+
+    const openModal = () => {
+        setDraft(config);
+        setModalOpen(true);
+    };
+
+    const closeModal = () => setModalOpen(false);
+
+    const handleApply = () => {
+        setConfig(draft);
+        setModalOpen(false);
+    };
+
+    const handleReset = () => {
+        setDraft(DEFAULT_CONFIG);
+        setConfig(DEFAULT_CONFIG);
+        setModalOpen(false);
+    };
+
+    const handleDraftChange = (e) => {
+        const { name, value } = e.target;
+        setDraft(prev => ({ ...prev, [name]: Number(value) }));
+    };
+
+    const handleDraftDateChange = (e) => {
+        const localDate = new Date(e.target.value);
+        if (!isNaN(localDate.getTime())) {
+            setDraft(prev => ({ ...prev, referenceTime: localDate.toISOString() }));
+        }
     };
 
     const parsedConfig = useMemo(() => ({
@@ -62,71 +71,106 @@ function App() {
     }), [config]);
 
     return (
-        <div className="container">
-            <div className="clock-container">
-                <h1>Current Time</h1>
-                <Clock />
-                <Status config={parsedConfig} />
-            </div>
+        <div className="app-shell">
+            {/* Header */}
+            <header className="header">
+                <span className="header-logo">Luminescent</span>
+                <div className="header-actions">
+                    <button className="icon-btn" onClick={openModal}>
+                        <span className="material-symbols-outlined">settings</span>
+                        Settings
+                    </button>
+                </div>
+            </header>
 
-            <div className="schedule-container">
-                <h2>Electricity Schedule</h2>
-                <div className="schedule-info">
-                    <p>Pattern: {config.onDuration} hours ON, {config.offDuration} hours OFF</p>
+            {/* Main */}
+            <main className="main-content">
+                {/* Clock */}
+                <div className="clock-section">
+                    <Clock />
+                    <Status config={parsedConfig} />
                 </div>
 
-                <div className="settings-panel" style={{
-                    margin: '20px 0',
-                    padding: '20px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}>
-                    <h3 style={{ marginTop: 0 }}>Settings</h3>
-                    <div style={{ marginBottom: '15px' }}>
-                        <label style={{ display: 'block', marginBottom: '5px' }}>
-                            ON Duration (hours):
-                        </label>
-                        <input
-                            type="number"
-                            name="onDuration"
-                            value={config.onDuration}
-                            onChange={handleChange}
-                            min="1"
-                            style={{ padding: '5px', borderRadius: '4px', border: '1px solid #ccc', width: '100px', color: '#333' }}
-                        />
-                    </div>
-                    <div style={{ marginBottom: '15px' }}>
-                        <label style={{ display: 'block', marginBottom: '5px' }}>
-                            OFF Duration (hours):
-                        </label>
-                        <input
-                            type="number"
-                            name="offDuration"
-                            value={config.offDuration}
-                            onChange={handleChange}
-                            min="1"
-                            style={{ padding: '5px', borderRadius: '4px', border: '1px solid #ccc', width: '100px', color: '#333' }}
-                        />
-                    </div>
-                    <div style={{ marginBottom: '15px' }}>
-                        <label style={{ display: 'block', marginBottom: '5px' }}>
-                            Reference Start Time (Last known ON time):
-                        </label>
-                        <input
-                            type="datetime-local"
-                            name="referenceTime"
-                            value={formatForInput(config.referenceTime)}
-                            onChange={handleDateChange}
-                            style={{ padding: '5px', borderRadius: '4px', border: '1px solid #ccc', width: '100%', maxWidth: '250px', color: '#333' }}
-                        />
-                    </div>
-                    <button onClick={handleReset} style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#e74c3c', color: 'white', border: 'none', borderRadius: '4px' }}>
-                        Reset to Default
+                {/* Action buttons */}
+                <div className="action-buttons">
+                    <button className="action-btn action-btn-secondary" onClick={openModal}>
+                        <span className="material-symbols-outlined">tune</span>
+                        Update Schedule
                     </button>
                 </div>
 
-                <ScheduleList config={parsedConfig} />
+                {/* Schedule */}
+                <div className="schedule-section">
+                    <div className="schedule-section-header">
+                        <span className="schedule-section-title">Electricity Schedule</span>
+                        <span className="schedule-pattern-badge">
+                            {config.onDuration}h ON / {config.offDuration}h OFF
+                        </span>
+                    </div>
+                    <ScheduleList config={parsedConfig} />
+                </div>
+            </main>
+
+            {/* Settings Modal */}
+            <div
+                className={`modal-overlay${modalOpen ? ' open' : ''}`}
+                onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
+            >
+                <div className="modal-panel">
+                    <div className="modal-header">
+                        <span className="modal-title">Configuration</span>
+                        <button className="modal-close-btn" onClick={closeModal}>
+                            <span className="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+
+                    <div className="form-field">
+                        <label className="form-label">On Duration (Hours)</label>
+                        <input
+                            className="form-input"
+                            type="number"
+                            name="onDuration"
+                            value={draft.onDuration}
+                            onChange={handleDraftChange}
+                            min="1"
+                        />
+                    </div>
+
+                    <div className="form-field">
+                        <label className="form-label">Off Duration (Hours)</label>
+                        <input
+                            className="form-input"
+                            type="number"
+                            name="offDuration"
+                            value={draft.offDuration}
+                            onChange={handleDraftChange}
+                            min="1"
+                        />
+                    </div>
+
+                    <div className="form-field">
+                        <label className="form-label">Reference Start Time</label>
+                        <input
+                            className="form-input"
+                            type="datetime-local"
+                            name="referenceTime"
+                            value={formatForInput(draft.referenceTime)}
+                            onChange={handleDraftDateChange}
+                        />
+                    </div>
+
+                    <div className="modal-actions">
+                        <button className="btn-ghost" onClick={handleReset}>
+                            Reset
+                        </button>
+                        <button className="btn-ghost" onClick={closeModal}>
+                            Cancel
+                        </button>
+                        <button className="btn-primary" onClick={handleApply}>
+                            Apply
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
