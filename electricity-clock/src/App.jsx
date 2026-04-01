@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import { fromZonedTime } from 'date-fns-tz';
+import { fromZonedTime, formatInTimeZone } from 'date-fns-tz';
+
+const TIMEZONE = 'Asia/Beirut';
 import { Clock } from './components/Clock';
 import { Status } from './components/Status';
 import { ScheduleList } from './components/ScheduleList';
@@ -31,8 +33,7 @@ function App() {
     const formatForInput = (isoString) => {
         if (!isoString) return '';
         const date = new Date(isoString);
-        const offset = date.getTimezoneOffset() * 60000;
-        return (new Date(date.getTime() - offset)).toISOString().slice(0, 16);
+        return formatInTimeZone(date, TIMEZONE, "yyyy-MM-dd'T'HH:mm");
     };
 
     const openModal = () => {
@@ -59,9 +60,9 @@ function App() {
     };
 
     const handleDraftDateChange = (e) => {
-        const localDate = new Date(e.target.value);
-        if (!isNaN(localDate.getTime())) {
-            setDraft(prev => ({ ...prev, referenceTime: localDate.toISOString() }));
+        const beirutDate = fromZonedTime(e.target.value, TIMEZONE);
+        if (!isNaN(beirutDate.getTime())) {
+            setDraft(prev => ({ ...prev, referenceTime: beirutDate.toISOString() }));
         }
     };
 
