@@ -3,9 +3,8 @@ import { fromZonedTime, formatInTimeZone } from 'date-fns-tz';
 const TIMEZONE = 'Asia/Beirut';
 
 export function generateElectricitySchedule(periodCount = 56, config = {}) {
-    // Default reference time matches origin/main logic: Feb 7, 2026, 12:00 in Asia/Beirut
-    // This creates a UTC Date object corresponding to that local time
-    const defaultReferenceTime = fromZonedTime('2026-02-07 12:00:00', TIMEZONE);
+    // Default reference time: March 18, 2026, 15:00 in Asia/Beirut
+    const defaultReferenceTime = fromZonedTime('2026-03-18 15:00:00', TIMEZONE);
 
     const {
         onDuration = 3,
